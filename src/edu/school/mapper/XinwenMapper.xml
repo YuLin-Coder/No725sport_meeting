@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.school.dao.XinwenDao">
+ <resultMap id="BaseResultMap" type="edu.school.model.Xinwen">
+    <id column="id" jdbcType="INTEGER" property="id" />   
+    <result column="photo" jdbcType="VARCHAR" property="photo" /> 
+     <result column="title" jdbcType="VARCHAR" property="title" />              
+      <result column="content" jdbcType="VARCHAR" property="content" /> 
+        <result column="editor" jdbcType="INTEGER" property="editor" /> 
+             
+        <result column="create_time" jdbcType="VARCHAR" property="createTime" /> 
+         
+        <result column="cname" jdbcType="VARCHAR" property="cname" /> 
+  </resultMap>
+ 
+<select id="findAll"  parameterType="edu.school.model.Xinwen" resultMap="BaseResultMap">
+  select n.*,a.username as cname  from news n inner join admin a on a.id = n.editor
+  </select>
+  
+  <select id="findByXinwenMap" parameterType="map" resultMap="BaseResultMap">
+  select n.*,a.username as cname  from news n inner join admin a on a.id = n.editor where n.title like  concat('%',#{title},'%')
+  </select>
+  
+   
+   <select id="findById" parameterType="edu.school.model.Xinwen" resultMap="BaseResultMap">
+  select n.*,a.username as cname  from news n inner join admin a on a.id = n.editor where n.id=#{id}
+  </select>
+  
+  <insert id="add" parameterType="edu.school.model.Xinwen" >
+    insert into news (title,photo,content,editor,create_time)
+    values (#{title,jdbcType=VARCHAR},#{photo,jdbcType=VARCHAR},#{content,jdbcType=VARCHAR},#{editor,jdbcType=INTEGER},#{createTime,jdbcType=VARCHAR})
+  </insert>
+  
+<update id="update" parameterType="edu.school.model.Xinwen">
+    update news set    
+    title = #{record.title,jdbcType=VARCHAR},
+    photo=#{record.photo,jdbcType=VARCHAR},
+      content = #{record.content,jdbcType=VARCHAR},
+      editor = #{record.editor,jdbcType=INTEGER},
+      create_time = #{record.createTime,jdbcType=VARCHAR}
+      where id=#{record.id}
+  </update>
+  
+ <delete id="delete" parameterType="java.lang.Integer">
+    delete from news
+    where id = #{id}
+  </delete> 
+  
+  
+</mapper>

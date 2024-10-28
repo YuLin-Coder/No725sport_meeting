@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.school.dao.CommentDao">
+ <resultMap id="BaseResultMap" type="edu.school.model.Comment">
+    <id column="id" jdbcType="INTEGER" property="id" />   
+     <result column="news_id" jdbcType="INTEGER" property="newsId" />              
+      <result column="content" jdbcType="VARCHAR" property="content" /> 
+        <result column="u_id" jdbcType="INTEGER" property="uId" /> 
+        <result column="create_time" jdbcType="VARCHAR" property="createTime" /> 
+          <result column="cname" jdbcType="VARCHAR" property="cname" /> 
+          <result column="tx" jdbcType="VARCHAR" property="tx" /> 
+          <result column="newstitle" jdbcType="VARCHAR" property="newstitle" />
+  </resultMap>
+ 
+<select id="findAll"  parameterType="edu.school.model.Comment" resultMap="BaseResultMap">
+  select c.*,u.nickname as cname,n.title as newstitle  from comment c inner join user u on u.id = c.u_id
+  inner join news n on n.id = c.news_id
+  </select>
+  
+  <select id="findByProductMap" parameterType="map" resultMap="BaseResultMap">
+   select c.*,u.nickname as cname,n.title as newstitle  from comment c inner join user u on u.id = c.u_id
+  inner join news n on n.id = c.news_id where c.content like  concat('%',#{content},'%')
+  </select>
+  
+   
+   <select id="findById" parameterType="edu.school.model.Comment" resultMap="BaseResultMap">
+  select * from comment where id=#{id}
+  </select>
+  
+  <insert id="add" parameterType="edu.school.model.Comment" >
+    insert into comment (news_id,content,u_id,create_time)
+    values (#{newsId,jdbcType=INTEGER},#{content,jdbcType=VARCHAR},#{uId,jdbcType=INTEGER},#{createTime,jdbcType=VARCHAR})
+  </insert>
+  
+<update id="update" parameterType="edu.school.model.Comment">
+    update comment set    
+    news_id = #{record.newsId,jdbcType=INTEGER},
+      content = #{record.content,jdbcType=VARCHAR},
+      u_id = #{record.uId,jdbcType=INTEGER},
+      create_time = #{record.createTime,jdbcType=VARCHAR}
+      where id=#{record.id}
+  </update>
+  
+ <delete id="delete" parameterType="java.lang.Integer">
+    delete from comment
+    where id = #{id}
+  </delete> 
+  
+  
+  <select id="findByNewsId" parameterType="edu.school.model.Comment" resultMap="BaseResultMap">
+  select c.*,u.nickname as cname,u.tx as tx from comment c inner join user u on u.id = c.u_id where news_id=#{id} order by create_time desc
+  </select>
+  
+   <select id="findMyAll" parameterType="edu.school.model.Comment" resultMap="BaseResultMap">
+  select c.*,u.nickname as cname,u.tx as tx from comment c inner join user u on u.id = c.u_id where u_id=#{id} order by create_time desc
+  </select>
+</mapper>

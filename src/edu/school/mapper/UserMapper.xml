@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.school.dao.UserDao">
+ <resultMap id="BaseResultMap" type="edu.school.model.User">
+    <id column="id" jdbcType="INTEGER" property="id" />
+     <result column="stuno" jdbcType="VARCHAR" property="stuno" />     
+    <result column="phone" jdbcType="VARCHAR" property="phone" />     
+    <result column="pwd" jdbcType="VARCHAR" property="pwd" /> 
+     <result column="realname" jdbcType="VARCHAR" property="realname" />
+    <result column="nickname" jdbcType="VARCHAR" property="nickname" />        
+     <result column="sex" jdbcType="VARCHAR" property="sex" />                 
+    <result column="tx" jdbcType="VARCHAR" property="tx" />
+     <result column="bj" jdbcType="VARCHAR" property="bj" />
+      <result column="grade" jdbcType="VARCHAR" property="grade" />
+       <result column="major" jdbcType="VARCHAR" property="major" />
+        <result column="registe_time" jdbcType="VARCHAR" property="registe_time" />
+         <result column="status" jdbcType="VARCHAR" property="status" />
+  </resultMap>
+ 
+ <select id="selectAll"  parameterType="edu.school.model.User" resultMap="BaseResultMap">
+    select * from user
+    order by id asc
+  </select>
+
+  
+  <select id="findById" parameterType="edu.school.model.User" resultMap="BaseResultMap">
+  select * from user where id=#{id}
+  </select>
+    <select id="findByUserMap" parameterType="map" resultMap="BaseResultMap">
+  select * from user where nickname like  concat('%',#{nickname},'%') and phone like concat('%',#{phone},'%') 
+  </select>
+  
+  <insert id="insert" parameterType="edu.school.model.User" >
+    insert into user (stuno,phone,pwd,realname,nickname,sex,tx,bj,grade,major,registe_time,status)
+    values (#{stuno,jdbcType=VARCHAR},#{phone,jdbcType=VARCHAR},#{pwd,jdbcType=VARCHAR},#{realname,jdbcType=VARCHAR},
+    #{nickname,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR},#{tx,jdbcType=VARCHAR},#{bj,jdbcType=VARCHAR},
+    #{grade,jdbcType=VARCHAR},#{major,jdbcType=VARCHAR},#{registe_time,jdbcType=VARCHAR},#{status,jdbcType=INTEGER})
+  </insert>
+  
+  <update id="update" parameterType="edu.school.model.User">
+    update user set 
+      stuno = #{record.stuno,jdbcType=VARCHAR}, 
+      phone = #{record.phone,jdbcType=VARCHAR},
+      pwd = #{record.pwd,jdbcType=VARCHAR},
+      realname = #{record.realname,jdbcType=VARCHAR},
+      sex = #{record.sex,jdbcType=VARCHAR},
+      tx = #{record.tx,jdbcType=VARCHAR},
+      bj = #{record.bj,jdbcType=VARCHAR},
+      grade = #{record.grade,jdbcType=VARCHAR},
+      major = #{record.major,jdbcType=VARCHAR},
+      registe_time = #{record.registe_time,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=INTEGER},
+      nickname=#{record.nickname,jdbcType=VARCHAR}
+  
+      where id=#{record.id}
+  </update>
+  
+ <update id="updateStatus" parameterType="edu.school.model.User">
+    update user set 
+      
+      status=#{record.status,jdbcType=INTEGER}
+  
+      where id=#{record.id}
+  </update>
+ <delete id="delete" parameterType="java.lang.Integer">
+    delete from user
+    where id = #{id}
+  </delete> 
+  <select id="findByPwdAndNo" parameterType="edu.school.model.Admin" resultMap="BaseResultMap">
+      select * from user where stuno=#{stuno} and pwd=#{pwd}
+  </select>
+  <select id="findByNo" parameterType="edu.school.model.Admin" resultMap="BaseResultMap">
+      select * from user where stuno=#{stuno} 
+  </select>
+  
+  
+</mapper>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.school.dao.CategoryDao">
+ <resultMap id="BaseResultMap" type="edu.school.model.Category">
+    <id column="id" jdbcType="INTEGER" property="id" />   
+     <result column="cname" jdbcType="VARCHAR" property="cname" />              
+      <result column="note" jdbcType="VARCHAR" property="note" />     
+  </resultMap>
+ 
+ <select id="findAll"  parameterType="edu.school.model.Category" resultMap="BaseResultMap">
+    select * from category 
+  </select>
+  
+  <select id="findByCategoryMap" parameterType="map" resultMap="BaseResultMap">
+  select * from category where cname like  concat('%',#{cname},'%')
+  </select>
+  
+   
+  <select id="findById" parameterType="edu.school.model.Category" resultMap="BaseResultMap">
+  select * from category where id=#{id}
+  </select>
+  
+  <insert id="add" parameterType="edu.school.model.Category" >
+    insert into category (cname,note)
+    values (#{cname,jdbcType=VARCHAR},#{note,jdbcType=VARCHAR})
+  </insert>
+  
+  <update id="update" parameterType="edu.school.model.Category">
+    update category set    
+      cname = #{record.cname,jdbcType=VARCHAR}  
+      where id=#{record.id}
+ 
+  </update>
+  
+ <delete id="delete" parameterType="java.lang.Integer">
+    delete from category
+    where id = #{id}
+  </delete> 
+  
+  
+</mapper>

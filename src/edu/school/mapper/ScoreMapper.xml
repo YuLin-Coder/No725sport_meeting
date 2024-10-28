@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.school.dao.ScoreDao">
+ <resultMap id="BaseResultMap" type="edu.school.model.Score">
+    <id column="id" jdbcType="INTEGER" property="id" />   
+      <result column="baoming_id" jdbcType="INTEGER" property="baomingId" /> 
+        <result column="mingci" jdbcType="INTEGER" property="mingci" /> 
+        <result column="note" jdbcType="VARCHAR" property="note" /> 
+         <result column="tname" jdbcType="VARCHAR" property="tname" /> 
+          <result column="rname" jdbcType="VARCHAR" property="rname" /> 
+           <result column="uname" jdbcType="VARCHAR" property="uname" /> 
+           <result column="tdate" jdbcType="VARCHAR" property="tdate" /> 
+  </resultMap>
+ 
+ <select id="findAll"  parameterType="edu.school.model.Score" resultMap="BaseResultMap">
+	SELECT
+	s.*,
+	t.NAME AS tname,
+	t.create_date as tdate,
+	r.NAME AS rname,
+	u.nickname AS uname 
+FROM
+	SCORE s
+	INNER JOIN baoming b ON s.baoming_id = b.id
+	INNER JOIN sport t ON b.sport_id = t.id
+	INNER JOIN referee r ON t.referee_id = r.id
+	INNER JOIN USER u ON u.id = b.uid
+  </select>
+  <select id="findByProductMap" parameterType="map" resultMap="BaseResultMap">
+SELECT
+	s.*,
+	t.NAME AS tname,
+	t.create_date as tdate,
+	r.NAME AS rname,
+	u.nickname AS uname 
+FROM
+	SCORE s
+	INNER JOIN baoming b ON s.baoming_id = b.id
+	INNER JOIN sport t ON b.sport_id = t.id
+	INNER JOIN referee r ON t.referee_id = r.id
+	INNER JOIN USER u ON u.id = b.uid  where t.name like  concat('%',#{tname},'%')
+  </select>
+  
+   
+  <select id="findById" parameterType="edu.school.model.Score" resultMap="BaseResultMap">
+  SELECT
+	s.*,
+	t.NAME AS tname,
+	t.create_date as tdate,
+	r.NAME AS rname,
+	u.nickname AS uname 
+FROM
+	SCORE s
+	INNER JOIN baoming b ON s.baoming_id = b.id
+	INNER JOIN sport t ON b.sport_id = t.id
+	INNER JOIN referee r ON t.referee_id = r.id
+	INNER JOIN USER u ON u.id = b.uid where s.id=#{id}
+  </select>
+  
+  <insert id="add" parameterType="edu.school.model.Score" >
+    insert into score (baoming_id,mingci,note)
+    values (#{baomingId,jdbcType=INTEGER},#{mingci,jdbcType=INTEGER},#{note,jdbcType=VARCHAR})
+  </insert>
+  
+  <update id="update" parameterType="edu.school.model.Score">
+    update score set    
+      baoming_id = #{record.baomingId,jdbcType=INTEGER},
+      mingci = #{record.mingci,jdbcType=INTEGER},
+      note = #{record.note,jdbcType=VARCHAR}
+      where id=#{record.id}
+  </update>
+  
+ <delete id="delete" parameterType="java.lang.Integer">
+    delete from score
+    where id = #{id}
+  </delete> 
+  
+  
+  <select id="findByScore" parameterType="edu.school.model.Score" resultMap="BaseResultMap">
+  SELECT
+	s.*,
+	t.NAME AS tname,
+	t.create_date as tdate,
+	r.NAME AS rname,
+	u.nickname AS uname 
+FROM
+	SCORE s
+	INNER JOIN baoming b ON s.baoming_id = b.id
+	INNER JOIN sport t ON b.sport_id = t.id
+	INNER JOIN referee r ON t.referee_id = r.id
+	INNER JOIN USER u ON u.id = b.uid where t.id=#{id}
+	order by s.mingci asc
+  </select>
+</mapper>

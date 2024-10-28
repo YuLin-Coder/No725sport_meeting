@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.school.dao.ProductDao">
+ <resultMap id="BaseResultMap" type="edu.school.model.Product">
+    <id column="id" jdbcType="INTEGER" property="id" />   
+     <result column="name" jdbcType="VARCHAR" property="name" />              
+      <result column="detail" jdbcType="VARCHAR" property="detail" /> 
+        <result column="kc" jdbcType="INTEGER" property="kc" /> 
+        <result column="price" jdbcType="INTEGER" property="price" /> 
+          <result column="dw" jdbcType="VARCHAR" property="dw" /> 
+          <result column="img_url" jdbcType="VARCHAR" property="img_url" /> 
+         <result column="c_id" jdbcType="INTEGER" property="c_id" /> 
+         <!-- 一对一级联 -->
+            <association property="category" javaType="edu.school.model.Category">    
+             <id column="id" jdbcType="INTEGER" property="id" />
+                  <result column="cname" jdbcType="VARCHAR" property="cname"/>
+            </association>         
+  </resultMap>
+ 
+ <select id="findAll"  parameterType="edu.school.model.Product" resultMap="BaseResultMap">
+  select p.*,c.cname from product p left join category c on p.c_id=c.id
+  </select>
+  
+  <select id="findByProductMap" parameterType="map" resultMap="BaseResultMap">
+  select p.*,c.cname from product p left join category c on p.c_id=c.id where name like  concat('%',#{name},'%')
+  </select>
+  
+   
+  <select id="findById" parameterType="edu.school.model.Product" resultMap="BaseResultMap">
+  select * from product where id=#{id}
+  </select>
+  
+  <insert id="add" parameterType="edu.school.model.Product" >
+    insert into product (name,detail,kc,price,dw,img_url,c_id)
+    values (#{name,jdbcType=VARCHAR},#{detail,jdbcType=VARCHAR},#{kc,jdbcType=INTEGER},#{price,jdbcType=INTEGER},
+    #{dw,jdbcType=VARCHAR}, #{img_url,jdbcType=VARCHAR},#{c_id,jdbcType=INTEGER})
+  </insert>
+  
+  <update id="update" parameterType="edu.school.model.Product">
+    update product set    
+      name = #{record.name,jdbcType=VARCHAR},
+      detail = #{record.detail,jdbcType=VARCHAR},
+      kc = #{record.kc,jdbcType=INTEGER},
+      price = #{record.price,jdbcType=INTEGER},
+      dw = #{record.dw,jdbcType=VARCHAR},
+      img_url = #{record.img_url,jdbcType=VARCHAR}     
+      where id=#{record.id}
+  </update>
+  
+ <delete id="delete" parameterType="java.lang.Integer">
+    delete from product
+    where id = #{id}
+  </delete> 
+  
+  
+</mapper>

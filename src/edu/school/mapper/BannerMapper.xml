@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.school.dao.BannerDao">
+ <resultMap id="BaseResultMap" type="edu.school.model.Banner">
+    <id column="id" jdbcType="INTEGER" property="id" />   
+     <result column="title" jdbcType="VARCHAR" property="title" />              
+      <result column="photo" jdbcType="VARCHAR" property="photo" /> 
+        <result column="url" jdbcType="VARCHAR" property="url" /> 
+        <result column="note" jdbcType="VARCHAR" property="note" /> 
+         
+  </resultMap>
+ 
+ <select id="findAll"  parameterType="edu.school.model.Banner" resultMap="BaseResultMap">
+  select * from banner
+  </select>
+  
+  <select id="findByProductMap" parameterType="map" resultMap="BaseResultMap">
+  select * from banner where title like  concat('%',#{title},'%')
+  </select>
+  
+   
+  <select id="findById" parameterType="edu.school.model.Banner" resultMap="BaseResultMap">
+  select * from banner where id=#{id}
+  </select>
+  
+  <insert id="add" parameterType="edu.school.model.Banner" >
+    insert into banner (title,photo,url,note)
+    values (#{title,jdbcType=VARCHAR},#{photo,jdbcType=VARCHAR},#{url,jdbcType=VARCHAR},#{note,jdbcType=VARCHAR})
+  </insert>
+  
+  <update id="update" parameterType="edu.school.model.Banner">
+    update banner set    
+    title = #{record.title,jdbcType=VARCHAR},
+      photo = #{record.photo,jdbcType=VARCHAR},
+      url = #{record.url,jdbcType=VARCHAR},
+      note = #{record.note,jdbcType=VARCHAR}
+      where id=#{record.id}
+  </update>
+  
+ <delete id="delete" parameterType="java.lang.Integer">
+    delete from banner
+    where id = #{id}
+  </delete> 
+  
+  
+</mapper>

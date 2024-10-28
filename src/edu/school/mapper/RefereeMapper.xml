@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.school.dao.RefereeDao">
+ <resultMap id="BaseResultMap" type="edu.school.model.Referee">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" /> 
+    <result column="phone" jdbcType="VARCHAR" property="phone" /> 
+     <result column="photo" jdbcType="VARCHAR" property="photo" /> 
+     <result column="pwd" jdbcType="VARCHAR" property="pwd" />
+     <result column="note" jdbcType="VARCHAR" property="note" />
+  
+  </resultMap>
+ 
+ 
+   <select id="findById" parameterType="edu.school.model.Referee" resultMap="BaseResultMap">
+     select * from referee where id=#{id}
+  </select>
+  
+    <select id="findByUserNameAndPwd" parameterType="edu.school.model.Referee" resultMap="BaseResultMap">
+      select * from referee where phone=#{phone} and pwd=#{pwd}
+  </select>
+  
+  <select id="findByRefereeMap" parameterType="map" resultMap="BaseResultMap">
+  select * from referee where name like  concat('%',#{name},'%')
+  </select>
+ 
+  <update id="update" parameterType="edu.school.model.Referee">
+    update referee set    
+      pwd = #{referee.pwd,jdbcType=VARCHAR},
+      phone = #{referee.phone,jdbcType=VARCHAR},
+      photo = #{referee.photo,jdbcType=VARCHAR},
+      name = #{referee.name,jdbcType=VARCHAR} 
+      where id=#{referee.id}
+
+  </update>
+  
+   <select id="findAll" parameterType="edu.school.model.Referee" resultMap="BaseResultMap">
+     select * from referee 
+  </select>
+  
+   
+  
+    <insert id="add" parameterType="edu.school.model.Referee" >
+    insert into referee (name,phone,photo,pwd,note)
+    values (#{name,jdbcType=VARCHAR},#{phone,jdbcType=VARCHAR},#{photo,jdbcType=VARCHAR},#{pwd,jdbcType=VARCHAR},#{note,jdbcType=VARCHAR})
+  </insert>
+  
+   <delete id="delete" parameterType="java.lang.Integer">
+    delete from referee
+    where id = #{id}
+  </delete> 
+  
+</mapper>

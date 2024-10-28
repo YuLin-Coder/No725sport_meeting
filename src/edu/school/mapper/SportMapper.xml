@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.school.dao.SportDao">
+ <resultMap id="BaseResultMap" type="edu.school.model.Sport">
+    <id column="id" jdbcType="INTEGER" property="id" />   
+     <result column="sno" jdbcType="VARCHAR" property="sno" />              
+      <result column="name" jdbcType="VARCHAR" property="name" /> 
+        <result column="detail" jdbcType="VARCHAR" property="detail" /> 
+        <result column="spot" jdbcType="VARCHAR" property="spot" /> 
+          <result column="photo" jdbcType="VARCHAR" property="photo" /> 
+          <result column="year" jdbcType="INTEGER" property="year" /> 
+          <result column="start_time" jdbcType="VARCHAR" property="startTime" /> 
+          <result column="end_time" jdbcType="VARCHAR" property="endTime" /> 
+          <result column="create_date" jdbcType="VARCHAR" property="createDate" /> 
+           <result column="amount" jdbcType="INTEGER" property="amount" /> 
+         <!-- 一对一级联 -->
+            <association property="referee" javaType="edu.school.model.Referee">    
+             <id column="refereeId" jdbcType="INTEGER" property="id" />
+                  <result column="cname" jdbcType="VARCHAR" property="name"/>
+            </association>         
+  </resultMap>
+ 
+ <select id="findAll"  parameterType="edu.school.model.Sport" resultMap="BaseResultMap">
+  select s.*,r.name as cname from sport s left join referee r on s.referee_id=r.id
+  </select>
+  
+    <select id="findMySport" parameterType="edu.school.model.Referee" resultMap="BaseResultMap">
+    select s.*,r.name as cname from sport s left join referee r on s.referee_id=r.id   where referee_id=#{referee_id}
+  </select>
+  
+  <select id="findByProductMap" parameterType="map" resultMap="BaseResultMap">
+ select s.*,r.name from sport s left join referee r on s.referee_id=r.id where s.name like  concat('%',#{name},'%')
+  </select>
+  
+   
+  <select id="findById" parameterType="edu.school.model.Sport" resultMap="BaseResultMap">
+  select * from sport where id=#{id}
+  </select>
+  
+  <insert id="add" parameterType="edu.school.model.Sport" >
+    insert into sport (sno,name,detail,spot,referee_id,photo,year,start_time,end_time,create_date,amount)
+    values (#{sno,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR},#{detail,jdbcType=VARCHAR},#{spot,jdbcType=VARCHAR},#{refereeId,jdbcType=INTEGER},
+    #{photo,jdbcType=VARCHAR},#{year,jdbcType=INTEGER}, #{startTime,jdbcType=VARCHAR},#{endTime,jdbcType=VARCHAR},#{createDate,jdbcType=VARCHAR},#{amount,jdbcType=INTEGER})
+  </insert>
+  
+  <update id="update" parameterType="edu.school.model.Sport">
+    update sport set    
+    sno = #{record.sno,jdbcType=VARCHAR},
+      name = #{record.name,jdbcType=VARCHAR},
+      detail = #{record.detail,jdbcType=VARCHAR},
+      spot = #{record.spot,jdbcType=VARCHAR},
+      referee_id = #{record.refereeId,jdbcType=INTEGER},
+      photo = #{record.photo,jdbcType=VARCHAR},
+        year = #{record.year,jdbcType=INTEGER},
+        start_time = #{record.startTime,jdbcType=DATE},
+        end_time = #{record.endTime,jdbcType=DATE},
+        create_date = #{record.createDate,jdbcType=DATE},
+        
+      amount = #{record.amount,jdbcType=INTEGER}     
+      where id=#{record.id}
+  </update>
+  
+ <delete id="delete" parameterType="java.lang.Integer">
+    delete from sport
+    where id = #{id}
+  </delete> 
+  
+  
+</mapper>
